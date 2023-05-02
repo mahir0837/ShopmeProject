@@ -9,6 +9,7 @@ import com.shopme.common.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -87,12 +88,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUserEnabledStatus(Integer id, Boolean enabled) {
+
         userRepository.updateEnabledStatus(id,enabled);
     }
 
     @Override
-    public Page<User> listByPage(int pageNum) {
-        Pageable pageable= PageRequest.of(pageNum-1,USERS_PER_PAGE);
+    public Page<User> listByPage(int pageNum,String sortField,String sortDir) {
+
+        Sort sort=Sort.by(sortField);
+        sort=sortDir.equals("asc") ? sort.ascending() : sort.descending();
+        Pageable pageable= PageRequest.of(pageNum-1,USERS_PER_PAGE,sort);
         return userRepository.findAll(pageable);
     }
 
