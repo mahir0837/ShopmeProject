@@ -2,8 +2,10 @@ package com.shopme.admin.Controller;
 
 import com.shopme.admin.Exception.UserNotFountException;
 import com.shopme.admin.Service.UserService;
+import com.shopme.admin.Service.impl.UserServiceImpl;
 import com.shopme.admin.Util.FileUploadUtil;
 import com.shopme.common.entity.User;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -13,6 +15,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Controller
@@ -26,9 +30,26 @@ public class UserController {
 
     }
     @GetMapping("/users")
-    public String listAll(Model model, RedirectAttributes redirectAttributes){
-        model.addAttribute("listUsers",userService.listAllUser());
+    public String listFirstPage(Model model, RedirectAttributes redirectAttributes){
+
         redirectAttributes.addFlashAttribute("message", "The user has been saved successfully.");
+        return listByPage(1,model);
+    }
+    @GetMapping("/users/page/{pageNum}")
+    public String listByPage(@PathVariable("pageNum")int pageNum , Model model){
+        Page<User>page=userService.listByPage(pageNum);
+        List<User>listUsers=page.getContent();
+        long startCount= (long) (pageNum - 1) * UserServiceImpl.USERS_PER_PAGE+1;
+        long endCount=startCount+UserServiceImpl.USERS_PER_PAGE-1;
+        if (endCount>page.getTotalElements()){
+            endCount=page.getTotalElements();
+        }
+        model.addAttribute("currentPage", pageNum);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("startCount", startCount);
+        model.addAttribute("endCount", endCount);
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("listUsers",listUsers);
         return "users";
     }
     @GetMapping("/users/new")
