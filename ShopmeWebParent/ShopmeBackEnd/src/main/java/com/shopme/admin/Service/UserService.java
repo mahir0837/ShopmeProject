@@ -17,5 +17,5 @@ public interface UserService {
     User getUserById(Integer id) throws UserNotFountException;
     void delete(Integer id) throws UserNotFountException;
     void updateUserEnabledStatus(Integer id,Boolean enabled);
-    Page<User> listByPage(int pageNum, String sortField,String sortDir);
+    Page<User> listByPage(int pageNum, String sortField,String sortDir,String keyword);
 }
