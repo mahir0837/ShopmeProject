@@ -156,6 +156,25 @@
   -webkit-animation-timing-function: var(--fa-animation-timing, cubic-bezier(0.28, 0.84, 0.42, 1));
           animation-timing-function: var(--fa-animation-timing, cubic-bezier(0.28, 0.84, 0.42, 1)); }
 
+
+@media screen and (max-width: 768px){
+    div.full-details { display: none !important;}
+    div.less-details { display:block; }
+}
+@media screen and (min-width: 768px) and (max-width: 1024px){
+    /*medium screen*/
+    div.full-details{display: block !important;}
+    div.less-details{display: none;}
+    .hideable-column{display: none}
+}
+@media screen and (min-width: 1024px){
+    div.less-details{display: none;}
+    .hideable-column{display: table-cell;}
+    /* large screen*/
+}
+.alert{
+    height: 100px
+}
 .fa-fade {
   -webkit-animation-name: fa-fade;
           animation-name: fa-fade;

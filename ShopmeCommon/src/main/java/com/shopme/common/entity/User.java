@@ -63,4 +63,8 @@ public class User {
         if (id==null||photos==null) return "/images/defaultImage.png";
         return "/user-photos/" + this.id + "/"+this.photos;
     }
+    @Transient
+    public String getFullName(){
+        return firstName+" "+lastName;
+    }
 }

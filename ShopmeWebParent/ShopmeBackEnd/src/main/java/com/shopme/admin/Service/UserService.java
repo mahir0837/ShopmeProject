@@ -13,7 +13,7 @@ public interface UserService {
     List<User>listAllUser();
     List<Role>listRoles();
     User save(User user);
-    boolean isEmailUnique(String email);
+    boolean isEmailUnique(Integer id,String email);
     User getUserById(Integer id) throws UserNotFountException;
     void delete(Integer id) throws UserNotFountException;
     void updateUserEnabledStatus(Integer id,Boolean enabled);

@@ -17,6 +17,6 @@ public interface UserRepository extends PagingAndSortingRepository<User,Integer>
 //    @Query(value = "SELECT * FROM users WHERE users.first_name ILIKE %?1% OR users.last_name ILIKE %?1% " +
 //            "OR users.email ILIKE %?1% ",nativeQuery = true)
     @Query("SELECT u FROM User u WHERE CONCAT(u.id,' ',u.email,' ',u.firstName,' '," +
-            "u.lastName)LIKE %?1%")
+            "u.lastName) LIKE %?1%")
     Page<User> findAll(String keyword, Pageable pageable);
 }

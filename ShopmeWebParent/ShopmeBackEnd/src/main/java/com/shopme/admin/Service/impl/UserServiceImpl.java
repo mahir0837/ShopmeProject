@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> listAllUser() {
-        List<User> listAll= (List<User>) userRepository.findAll();
+        List<User> listAll= (List<User>) userRepository.findAll(Sort.by("id").ascending());
         return listAll;
     }
 
@@ -46,25 +46,38 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(User user) {
-        boolean isUpdatingUser=(user.getId()!=null);
+        boolean isUpdatingUser = (user.getId() != null);
+
         if (isUpdatingUser) {
-            User existingUser=userRepository.findById(user.getId()).get();
-            if (user.getPassword().isEmpty()){
+            User existingUser = userRepository.findById(user.getId()).get();
+
+            if (user.getPassword().isEmpty()) {
                 user.setPassword(existingUser.getPassword());
-            }else{
+            } else {
                 encodePassword(user);
             }
-        }else{
+
+        } else {
             encodePassword(user);
         }
-        return userRepository.save(user);
 
+        return userRepository.save(user);
     }
 
     @Override
-    public boolean isEmailUnique(String email) {
+    public boolean isEmailUnique(Integer id,String email) {
         User userByEmail= userRepository.findByEmailIs(email);
-        return userByEmail==null;
+        if (userByEmail==null)return true;
+        boolean isCreatingNew=(id==null);
+        if (isCreatingNew){
+            if (userByEmail!=null)return false;
+            else{
+                if (userByEmail.getId()!=id){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     @Override
